@@ -34,6 +34,10 @@ export default function IntroductionScreen({ navigation }) {
                 onPress={() => navigation.navigate('Statistics')}
                 title="Statistics"
             />
+            <Button
+                onPress={() => navigation.navigate('Welcomme')}
+                title="Welcomme"
+            />
         </View>
     );
 }

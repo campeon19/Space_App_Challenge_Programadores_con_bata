@@ -6,7 +6,7 @@ import DailyResumeScreen from "./components/DailyResumeScreen";
 import MapScreen from "./components/MapScreen";
 import MenuScreen from "./components/MenuScreen";
 import StatisticsScreen from "./components/StatisticsScreen";
-
+import WelcommeScreen from './components/WelcommeScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -18,6 +18,7 @@ export default function App() {
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="Menu" component={MenuScreen} />
             <Stack.Screen name="Statistics" component={StatisticsScreen} />
+            <Stack.Screen name="Welcomme" component={WelcommeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
   )
