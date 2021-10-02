@@ -4,11 +4,6 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
     LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
 } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import Axios from 'axios';
@@ -19,8 +14,8 @@ import { TEMPORALDAILY } from '../utils/rutas'
 
     const screenWidth = Dimensions.get("window").width;
     const [datos, setDatos] = useState({
-    x_axis: [],
-    y_axis: []
+    x_axis: ["January", "February", "March", "April", "May", "June"],
+    y_axis: [20, 45, 28, 80, 99, 43]
     });
 
     // Consumo de datos del API
@@ -46,6 +41,7 @@ import { TEMPORALDAILY } from '../utils/rutas'
       x_axis: Object.keys(data.properties.parameter.CLOUD_AMT),
       y_axis: Object.values(data.properties.parameter.CLOUD_AMT)
     });
+    console.log(datos)
     console.log(datos)
     } catch (e) {
     console.log(e);
