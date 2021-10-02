@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/splash1.png",
     "splash": {
-      "image": "./assets/splash1.png",
+      "image": "./assets/splash3.png",
       "resizeMode": "contain",
       "backgroundColor": "#25166B"
     },
@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/splash1.png"
-    }
+    },
+    "description": "Space App Challenge Nasa 2021 - You are my sunshine",
+    "githubUrl": "https://github.com/campeon19/Space_App_Challenge_Programadores_con_bata"
   }
 }
