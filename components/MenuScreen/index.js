@@ -1,12 +1,16 @@
-import { Text, View, StyleSheet } from "react-native";
+import {Text, View, StyleSheet, Button} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 
-export default function MenuScreen() {
+export default function MenuScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Text>This is the Menu Screen!</Text>
             <StatusBar style="auto" />
+            <Button
+                onPress={() => navigation.navigate('Introduction')}
+                title="Return"
+            />
         </View>
     );
 }
