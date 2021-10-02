@@ -7,13 +7,15 @@ import MapScreen from "./components/MapScreen";
 import MenuScreen from "./components/MenuScreen";
 import StatisticsScreen from "./components/StatisticsScreen";
 import WelcommeScreen from './components/WelcommeScreen';
+import Sliders from './components/WelcommeScreen/sliders';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Introduction" component={IntroductionScreen} />
+            <Stack.Screen name="Introduction" component={IntroductionScreen} />
             <Stack.Screen name="Daily" component={DailyResumeScreen} />
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="Menu" component={MenuScreen} />
