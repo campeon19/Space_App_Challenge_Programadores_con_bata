@@ -68,9 +68,6 @@ function IntroductionScreen({ navigation, changeShowApp, showApp }) {
 
 
     useEffect(() => {
-
-        console.log(showApp)
-
         fetch('https://reactnative.dev/movies.json')
             .then((response) => response.json())
             .then((json) => setMessage(json.movies[0].title))
