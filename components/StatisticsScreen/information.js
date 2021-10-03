@@ -2,19 +2,27 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Button, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Axios from 'axios';
+import { DATAYPES, YEARS, TIME, PARAMETERS} from '../utils/variables';
+
 
 export default function Information({ route, navigation }) {
   const { location } = route.params;
-  const dataTypes = ["Temporal","Application"];
-  const years = [];
-  const times = ["Hourly","Daily", "Monthly", "Climatology"]
+  const ruta = "https://power.larc.nasa.gov/api";
   const [selectedValue, setSelectedValue] = useState("Temporal");
+  const [selectedYear, setSelectedYear] = useState("1981");
   const [timeValue, setTimeValue] = useState("Hourly");
+  const [parametersValue, setParametersValue] = useState("PRECSNOLAND");
   const [start, setStart] = useState(new Date(1598051730000));
   const [end, setEnd] = useState(new Date(1598051730000));
   const [showButtonEnd, setShowButtonEnd] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
+  const [link, setLink] = useState("");
+  const [datos, setDatos] = useState({
+    x_axis: [0],
+    y_axis: [0],
+  });
 
   const onChangeStart = (event, selectedDate) => {
     const currentDate = selectedDate || start;
@@ -35,15 +43,47 @@ export default function Information({ route, navigation }) {
   const showModeEnd = () => {
     setShowEnd(true);
   };
-  const fillingYears = () => {
-    for(let i = 0; i <= 40 ; i++){
-      years.push((1981 + i));
+
+  const request = async () => {
+    try {
+      console.log(link)
+      console.log(parametersValue)
+      console.log(location.longitude)
+      console.log(location.latitude)
+        const {data} = await Axios.get(link,
+            {
+                headers: {
+                    'Cookie': '72433e29e5a9aabda23011a87312c9f6=95caff22feff53d170254d75a7038a05',
+                },
+                params: {
+                    parameters: parametersValue,
+                    community: "RE",
+                    longitude: location.longitude,
+                    latitude: location.latitude,
+                    start: "20201201",
+                    end: "20201231",
+                    format: "JSON",
+                },
+            });
+        console.log('new')
+        await setDatos({
+            ...datos,
+            x_axis: Object.keys(data.properties.parameter),
+            y_axis: Object.values(data.properties.parameter)
+        });
+        console.log(datos.x_axis)
+    } catch (e) {
+        console.log(e);
     }
+  };
+  const onClick = () => {
+    setLink(`${ruta}/${selectedValue.toLowerCase()}/${timeValue.toLowerCase()}/point`);
+    request();
   }
+
 
   useEffect(() => {
     alert(`Latitud: ${location.latitude} Longitud: ${location.longitude}`)
-    fillingYears();
   }, []);
 
   return (
@@ -53,18 +93,27 @@ export default function Information({ route, navigation }) {
         style={{ height: 50, width: 150 }}
         onValueChange={(itemValue) => setSelectedValue(itemValue)}
       >
-          {dataTypes.map((item)=>(
+          {DATAYPES.map((item)=>(
               <Picker.Item label={item} value={item} key={item} />
           ))}
         </Picker>
         <View>
           {selectedValue === "Temporal"?(
               <><Picker
+                      selectedValue={parametersValue}
+                      style={{ height: 50, width: 150 }}
+                      onValueChange={(itemValue) => setParametersValue(itemValue)}
+                  >
+                      {PARAMETERS.map((item) => (
+                          <Picker.Item label={item} value={item} key={item} />
+                      ))}
+                  </Picker>
+              <Picker
                       selectedValue={timeValue}
                       style={{ height: 50, width: 150 }}
                       onValueChange={(itemValue) => setTimeValue(itemValue)}
                   >
-                      {times.map((item) => (
+                      {TIME.map((item) => (
                           <Picker.Item label={item} value={item} key={item} />
                       ))}
                   </Picker>
@@ -100,16 +149,32 @@ export default function Information({ route, navigation }) {
                           )}
                     </View>
                   )}
+                  { timeValue==="Monthly"&&(
+                    <Picker
+                    selectedValue={selectedYear}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={(itemValue) => setSelectedYear(itemValue)}
+                  >
+                      {YEARS.map((item)=>(
+                          <Picker.Item label={item} value={item} key={item} />
+                      ))}
+                  </Picker>
+                  )}
                           </>
           ): selectedValue === "Application"?(
               <Text>Texto de prueba</Text>
               ): null}
         </View>
-        <Text style={styles.buttonsDates}>{selectedValue + "-" + timeValue + "\n" + start.getMonth() + " " + end.getMonth()}</Text>
+        <View style = {styles.buttonsDates} >
+          <Button onPress={onClick} title="View results" />
+        </View>
+        <Text style={styles.buttonsDates}>{`${start.getFullYear()}${start.getMonth()}${start.getDate()}`}</Text>
     </View>
   );
 }
-
+/*
+/api/temporal/climatology/point?parameters=T2M&community=SB&longitude=0&latitude=0&format=JSON 
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
