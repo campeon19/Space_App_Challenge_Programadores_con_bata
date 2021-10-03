@@ -80,8 +80,8 @@ export default function Information({ route, navigation }) {
                     format: "JSON",
                 },
             });
-        console.log(data.properties.parameter);
-        navigation.navigate('StatisticsGraphics', { location: data, time:  parametersValue});
+        console.log(timeValue)
+        navigation.navigate('StatisticsGraphics', { location: data, time:  timeValue});
     } catch (e) {
         console.log(e);
         alert("Invalid Data");
