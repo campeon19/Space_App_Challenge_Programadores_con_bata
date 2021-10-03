@@ -17,10 +17,9 @@ export default function MapScreen({ navigation }) {
             const data = await Location.getCurrentPositionAsync()
             coords = data.coords
         } catch (e) {
-            const data = await Location.getLastKnownPositionAsync()
-            coords = data.coords
+            coords = { latitude: 29.559346, longitude: -95.090022 }
         }
-        return coords ?? { latitude: 0, longitude: 0 }
+        return coords
     }
 
     useEffect(() => {
