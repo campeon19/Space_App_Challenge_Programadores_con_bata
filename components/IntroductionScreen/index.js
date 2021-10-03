@@ -102,6 +102,10 @@ export default function IntroductionScreen({ navigation }) {
                     onPress={() => navigation.navigate('Welcomme')}
                     title="Welcomme"
                 />
+                <Button
+                    onPress={() => navigation.navigate('StatisticsGraphics')}
+                    title="StatisticsGraphics"
+                />
             </View>
         ) : (
             <AppIntroSlider
