@@ -13,16 +13,7 @@ import { Provider } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const initialState ={
-  showApp: false,
-  coords: {
-    latitude: -90.6071,
-    longitude: 14.5120,
-    altitude: 1156.37,
-    accuracy: 0.009,
-    altitudeAccuracy: 0.009,
-    heading: 0,
-    speed: 0,
-}
+  showApp: false
 
 
 }
