@@ -4,9 +4,9 @@ import React, {useEffect, useState} from "react";
 import AppIntroSlider from 'react-native-app-intro-slider';
 import logo from '../../assets/icon.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
 
-
-export default function IntroductionScreen({ navigation }) {
+function IntroductionScreen({ navigation }) {
     const [message, setMessage] = useState('Loading...');
     const [showRealApp, setShowRealApp] = useState(false);
 
@@ -121,7 +121,29 @@ export default function IntroductionScreen({ navigation }) {
         )}
         </>        
     );
+
+
+
+    
 }
+//IMPORTANTE para acceder al estado global se accede con this.props.showApp
+//Para cambiar estado, la funcion es this.props.changeShowApp()
+function mapStateToProps(state){
+  return{
+    showApp: state.showApp
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    changeShowApp: () => dispatch({type: 'CHANGE_SHOWAPP'})
+  }
+
+}
+
+export default connect(mapStateToProps)(IntroductionScreen)
+
+
 
 const styles = StyleSheet.create({
     container: {
