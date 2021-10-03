@@ -46,11 +46,8 @@ export default function Information({ route, navigation }) {
   };
 
   const request = async () => {
-    var startDate = timeValue === "Monthly" ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
-    var endDate = timeValue === "Monthly" ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
-    console.log(startDate)
-    console.log(endDate)
-    console.log(parameters)
+    var startDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
+    var endDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
     try {
         const {data} = await Axios.get(link,
             {
@@ -169,7 +166,7 @@ export default function Information({ route, navigation }) {
                           )}
                     </View>
                   )}
-                  { timeValue==="Monthly"&&(
+                  { (timeValue==="Monthly" || timeValue==="Climatology")&&(
                     <><Picker
                 selectedValue={selectedStartYear}
                 style={{ height: 50, width: 150 }}
