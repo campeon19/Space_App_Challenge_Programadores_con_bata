@@ -1,34 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, Platform } from "react-native";
+import { View, StyleSheet, Text, Button, Platform  } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import SelectBox from 'react-native-multi-selectbox'
+import SelectBox from 'react-native-multi-selectbox';
 import Axios from 'axios';
-import { xorBy } from 'lodash'
-import { DATAYPES, YEARS, TIME, PARAMETERS,PARAMETERS2} from '../utils/variables';
+import { xorBy } from 'lodash';
+import { DATAYPES, YEARS, TIME, PARAMETERS} from '../utils/variables';
 
 
 export default function Information({ route, navigation }) {
   const { location } = route.params;
   const ruta = "https://power.larc.nasa.gov/api";
   const [selectedValue, setSelectedValue] = useState("Temporal");
-  const [selectedStartYear, setSelectedStartYear] = useState("1981");
-  const [selectedEndYear, setSelectedEndYear] = useState("1981");
+  const [selectedStartYear, setSelectedStartYear] = useState("1984");
+  const [selectedEndYear, setSelectedEndYear] = useState("1985");
   const [timeValue, setTimeValue] = useState("Hourly");
   const [parametersValue, setParametersValue] = useState("");
   const [start, setStart] = useState(new Date(1598051730000));
   const [end, setEnd] = useState(new Date(1598051730000));
   const [showButtonEnd, setShowButtonEnd] = useState(false);
+  const [showButtonEnd2, setShowButtonEnd2] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
   const [years2, setYears2] = useState([...YEARS]);
-  let link = ""
+  let link = "";
   let parameters = "";
 
   const onChangeStart = (event, selectedDate) => {
     const currentDate = selectedDate || start;
     setShowStart(Platform.OS === 'ios');
     setStart(currentDate);
+    setEnd(currentDate);
     setShowButtonEnd(true);
   };
 
@@ -48,8 +50,8 @@ export default function Information({ route, navigation }) {
   const request = async () => {
     var startDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
     var endDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
-    console.log(startDate)
-    console.log(endDate)
+    console.log(startDate);
+    console.log(endDate);
     try {
         const {data} = await Axios.get(link,
             {
@@ -66,149 +68,175 @@ export default function Information({ route, navigation }) {
                     format: "JSON",
                 },
             });
-        console.log(data.properties.parameter)
-        //navigation.navigate('StatisticsGraphics', { location: data })
+        console.log(data.properties.parameter);
+        //navigation.navigate('StatisticsGraphics', { location: data });
     } catch (e) {
         console.log(e);
-        alert("Incorrect datas")
+        alert("Invalid Data");
     }
   };
   const onClick = () => {
     link = `${ruta}/${selectedValue.toLowerCase()}/${timeValue.toLowerCase()}/point`;
-    parameters = ""
+    parameters = "";
     selectedParameters.map((item, index) => {
-      parameters += item.id+","
+      parameters += item.id+",";
     })
     parameters = parameters.slice(0, -1);
     request();
   }
 
   const onChange = (item) => {
-    setSelectedStartYear(item)
+    setSelectedStartYear(item);
   }
 
   useEffect(() => {
     setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear)+1)));
+    setSelectedEndYear(parseInt(selectedStartYear)+1);
+    setShowButtonEnd2(true);
   }, [selectedStartYear]);
 
   const test = () => {
     setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear))));
     selectedParameters.map((item, index) => {
-      parameters += item.id+","
-      //console.log(item.id)
+      parameters += item.id+",";
     })
-    console.log(parameters)
+    console.log(parameters);
   }
   const [selectedParameters, setSelectedParameters] = useState([])
   function onMultiChange() {
-    return (item) => setSelectedParameters(xorBy(selectedParameters, [item], 'id'))
+    return (item) => setSelectedParameters(xorBy(selectedParameters, [item], 'id'));
   }
   return (
     <View style={styles.container}>
-      <Picker
-        selectedValue={selectedValue}
-        style={{ height: 50, width: 150 }}
-        onValueChange={(itemValue) => setSelectedValue(itemValue)}
-      >
-          {DATAYPES.map((item)=>(
-              <Picker.Item label={item} value={item} key={item} />
-          ))}
-        </Picker>
-        {selectedValue === "Temporal"?(
-          <SelectBox
-            label="Select the parameters"
-            options={PARAMETERS2}
-            selectedValues={selectedParameters}
-            onMultiSelect={onMultiChange()}
-            onTapClose={onMultiChange()}
-            isMulti
-          />
-        ):null}
+      <View style={styles.selectbox}> 
+        <SelectBox
+          label="Select the parameters"
+          options={PARAMETERS}
+          selectedValues={selectedParameters}
+          onMultiSelect={onMultiChange()}
+          onTapClose={onMultiChange()}
+          isMulti
+        />
+      </View>
         <View>
-          {selectedValue === "Temporal"?(
+          <View style={styles.timeContainer}>
+            <Text>Service: </Text>
+            <Picker
+              selectedValue={timeValue}
+              style={styles.picker}
+              onValueChange={(itemValue) => setTimeValue(itemValue)}
+            >
+            {TIME.map((item) => (
+            <Picker.Item label={item} value={item} key={item} />
+             ))}
+            </Picker>
+          </View>
+          {(timeValue === "Hourly" || timeValue === "Daily") && (
+          <View>
+            <View style = {styles.buttonsDates}>
+              <Button color="#25166b" onPress={showModeStart} title="Start date" />
+            </View>
+            {showStart && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={start}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChange={onChangeStart}
+              minimumDate={new Date(2001, 0, 1)} 
+              maximumDate={new Date(2020, 11, 30)} />
+            )}
+            {showButtonEnd && (
+              <View style = {styles.buttonsDates} >
+                <Button color="#25166b" onPress={showModeEnd} title="End date" />
+              </View>
+            )}
+            {showEnd && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={end}
+                mode="date"
+                is24Hour={true}
+                display="default"
+                onChange={onChangeEnd}
+                minimumDate={start} 
+                maximumDate={new Date(2020, 11, 30)} />
+            )}
+          </View>
+          )}
+          { (timeValue==="Monthly" || timeValue==="Climatology")&&(
             <>
+            <View style = {styles.yearContainer}> 
+            <Text>Start Year: </Text>
               <Picker
-                      selectedValue={timeValue}
-                      style={{ height: 50, width: 150 }}
-                      onValueChange={(itemValue) => setTimeValue(itemValue)}
-                  >
-                      {TIME.map((item) => (
-                          <Picker.Item label={item} value={item} key={item} />
-                      ))}
-                  </Picker>
-                  {(timeValue === "Hourly" || timeValue === "Daily") && (
-                    <View>
-                      <View style = {styles.buttonsDates} >
-                        <Button onPress={showModeStart} title="Start date" />
-                      </View>
-                      {showStart && (
-                          <DateTimePicker
-                              testID="dateTimePicker"
-                              value={start}
-                              mode="date"
-                              is24Hour={true}
-                              display="default"
-                              onChange={onChangeStart}
-                              minimumDate={new Date(2001, 0, 1)} 
-                              maximumDate={new Date(2020, 11, 30)} />
-                      )}
-                      {showButtonEnd && (
-                          <View style = {styles.buttonsDates} >
-                              <Button onPress={showModeEnd} title="End date" />
-                          </View>
-                          )}
-                          {showEnd && (
-                              <DateTimePicker
-                                  testID="dateTimePicker"
-                                  value={end}
-                                  mode="date"
-                                  is24Hour={true}
-                                  display="default"
-                                  onChange={onChangeEnd}
-                                  minimumDate={start} 
-                                  maximumDate={new Date(2020, 11, 30)} />
-                          )}
-                    </View>
-                  )}
-                  { (timeValue==="Monthly" || timeValue==="Climatology")&&(
-                    <><Picker
                 selectedValue={selectedStartYear}
-                style={{ height: 50, width: 150 }}
+                style={styles.picker}
                 onValueChange={(itemValue) => onChange(itemValue)}
               >
-                {YEARS.map((item) => (
-                  <Picker.Item label={item} value={item} key={item} />
-                ))}
-              </Picker><Picker
+              {YEARS.map((item) => (
+                <Picker.Item label={item} value={item} key={item} />
+              ))}
+              </Picker>
+            </View>
+            <View style = {styles.yearContainer}>
+            <Text>End Year: </Text>
+              { showButtonEnd2 && (
+              <Picker
                 selectedValue={selectedEndYear}
-                style={{ height: 50, width: 150 }}
+                style={styles.picker}
                 onValueChange={(itemValue) => setSelectedEndYear(itemValue)}
               >
-                  {years2.map((item) => (
-                    <Picker.Item label={item} value={item} key={item} />
-                  ))}
-                </Picker></>
-                  )}
-                          </>
-          ): selectedValue === "Application"?(
-              <Text>Texto de prueba</Text>
-              ): null}
+              {years2.map((item) => (
+                <Picker.Item label={item} value={item} key={item} />
+              ))}
+              </Picker>
+              )}
+            </View>
+            </>
+              )}
         </View>
-        <View style = {styles.buttonsDates} >
-          <Button onPress={onClick} title="View results" />
+        <View style = {styles.buttonResult} >
+          <Button color="#25166b" onPress={onClick} title="View results" />
         </View>
-        <Text style={styles.buttonsDates}>{`${start.getFullYear()}${start.getMonth()}${start.getDate()}`}</Text>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonsDates:{
+    backgroundColor: "#5834f7",
     position: "relative",
-    marginTop: 20,
+    marginTop: 30,
+    width: 'auto',
+  },
+  buttonResult:{
+    backgroundColor: "#5834f7",
+    position: "relative",
+    bottom: '-12%',
+    width: '40%',
+  },
+  selectbox:{
+    width:'80%',
+  },
+  picker:{
+    height: 60, 
+    width: 150
+  },
+  yearContainer:{
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  timeContainer:{
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    textAlign: "center",
   }
 });
