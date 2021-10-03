@@ -19,6 +19,7 @@ export default function StatisticsScreen({ route, navigation }) {
         y_axis: {a:[0]},
         labels: {a:[0]},
         parameters: ['a'],
+        data: {a: {longname:"Loading", units: 'Sunshine'}},
         dates: [0, 0],
         coordinates: [location.geometry.coordinates[0], location.geometry.coordinates[1]],
     });
@@ -69,6 +70,26 @@ export default function StatisticsScreen({ route, navigation }) {
         return [date, labels]
     }
 
+    const setMonthDate = (dates) =>{
+        const labelRadix = Math.max(Math.floor(dates.length / 4), 1)
+        console.log(dates.length)
+        const date = []
+        const labels = []
+        dates.map((item, index)=> {
+            const year = item.slice(0, 4)
+            const month = parseInt(item.slice(4, 6), 10) - 1
+            date.push(year + ' ' + months[month])
+
+            if (index% labelRadix === 0)
+                labels.push(year + ' ' + months[month])
+            else
+                labels.push('')
+        })
+
+        return [date, labels]
+    }
+
+
     useEffect(() => {
 
         // Fecha
@@ -79,6 +100,7 @@ export default function StatisticsScreen({ route, navigation }) {
         const x_axis = {}
         const y_axis = {}
         const formatLabel = {}
+        const data = {}
         const parameters = Object.keys(location.properties.parameter)
         parameters.map((param) =>{
             const keys = Object.keys(location.properties.parameter[param])
@@ -92,6 +114,7 @@ export default function StatisticsScreen({ route, navigation }) {
             x_axis[param] = labels[0]
             y_axis[param] = values
             formatLabel[param] = labels[1]
+            data[param] = location.parameters[param]
         })
         setDatos({
             ...datos,
@@ -99,13 +122,14 @@ export default function StatisticsScreen({ route, navigation }) {
             y_axis: y_axis,
             labels: formatLabel,
             parameters: parameters,
+            data: data,
             dates: date,
         })
 
 
     }, []);
 
-
+    
     const chartConfig = {
         backgroundGradientFrom: '#FFF',
         backgroundGradientFromOpacity: '#FFF',
@@ -169,6 +193,7 @@ export default function StatisticsScreen({ route, navigation }) {
                                             data: datos.y_axis[param],
                                         }
                                     ],
+                                    legend: [datos.data[param].longname + ' (' + datos.data[param].units + ')']
                                 }}
                                 width={screenWidth - 10}
                                 height={330}
