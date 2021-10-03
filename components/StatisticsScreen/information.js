@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Button, Platform } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SelectBox from 'react-native-multi-selectbox'
 import Axios from 'axios';
-import { DATAYPES, YEARS, TIME, PARAMETERS} from '../utils/variables';
+import { xorBy } from 'lodash'
+import { DATAYPES, YEARS, TIME, PARAMETERS,PARAMETERS2} from '../utils/variables';
 
 
 export default function Information({ route, navigation }) {
@@ -13,7 +15,7 @@ export default function Information({ route, navigation }) {
   const [selectedStartYear, setSelectedStartYear] = useState("1981");
   const [selectedEndYear, setSelectedEndYear] = useState("1981");
   const [timeValue, setTimeValue] = useState("Hourly");
-  const [parametersValue, setParametersValue] = useState("PRECSNOLAND");
+  const [parametersValue, setParametersValue] = useState("");
   const [start, setStart] = useState(new Date(1598051730000));
   const [end, setEnd] = useState(new Date(1598051730000));
   const [showButtonEnd, setShowButtonEnd] = useState(false);
@@ -21,6 +23,7 @@ export default function Information({ route, navigation }) {
   const [showEnd, setShowEnd] = useState(false);
   const [years2, setYears2] = useState([...YEARS]);
   let link = ""
+  let parameters = "";
 
   const onChangeStart = (event, selectedDate) => {
     const currentDate = selectedDate || start;
@@ -47,6 +50,7 @@ export default function Information({ route, navigation }) {
     var endDate = timeValue === "Monthly" ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
     console.log(startDate)
     console.log(endDate)
+    console.log(parameters)
     try {
         const {data} = await Axios.get(link,
             {
@@ -54,7 +58,7 @@ export default function Information({ route, navigation }) {
                     'Cookie': '72433e29e5a9aabda23011a87312c9f6=95caff22feff53d170254d75a7038a05',
                 },
                 params: {
-                    parameters: parametersValue,
+                    parameters: parameters,
                     community: "RE",
                     longitude: location.longitude,
                     latitude: location.latitude,
@@ -64,7 +68,7 @@ export default function Information({ route, navigation }) {
                 },
             });
         console.log(data.properties.parameter)
-        navigation.navigate('StatisticsGraphics', { location: data })
+        //navigation.navigate('StatisticsGraphics', { location: data })
     } catch (e) {
         console.log(e);
         alert("Incorrect datas")
@@ -72,18 +76,34 @@ export default function Information({ route, navigation }) {
   };
   const onClick = () => {
     link = `${ruta}/${selectedValue.toLowerCase()}/${timeValue.toLowerCase()}/point`;
+    parameters = ""
+    selectedParameters.map((item, index) => {
+      parameters += item.id+","
+    })
+    parameters = parameters.slice(0, -1);
     request();
   }
 
+  const onChange = (item) => {
+    setSelectedStartYear(item)
+  }
+
   useEffect(() => {
-    alert(`Latitud: ${location.latitude} Longitud: ${location.longitude}`)
-  }, []);
+    setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear))));
+  }, [selectedStartYear]);
 
   const test = () => {
     setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear))));
-    console.log(years2)
+    selectedParameters.map((item, index) => {
+      parameters += item.id+","
+      //console.log(item.id)
+    })
+    console.log(parameters)
   }
-
+  const [selectedParameters, setSelectedParameters] = useState([])
+  function onMultiChange() {
+    return (item) => setSelectedParameters(xorBy(selectedParameters, [item], 'id'))
+  }
   return (
     <View style={styles.container}>
       <Picker
@@ -95,17 +115,19 @@ export default function Information({ route, navigation }) {
               <Picker.Item label={item} value={item} key={item} />
           ))}
         </Picker>
+        {selectedValue === "Temporal"?(
+          <SelectBox
+            label="Select the parameters"
+            options={PARAMETERS2}
+            selectedValues={selectedParameters}
+            onMultiSelect={onMultiChange()}
+            onTapClose={onMultiChange()}
+            isMulti
+          />
+        ):null}
         <View>
           {selectedValue === "Temporal"?(
-              <><Picker
-                      selectedValue={parametersValue}
-                      style={{ height: 50, width: 150 }}
-                      onValueChange={(itemValue) => setParametersValue(itemValue)}
-                  >
-                      {PARAMETERS.map((item) => (
-                          <Picker.Item label={item} value={item} key={item} />
-                      ))}
-                  </Picker>
+            <>
               <Picker
                       selectedValue={timeValue}
                       style={{ height: 50, width: 150 }}
@@ -151,7 +173,7 @@ export default function Information({ route, navigation }) {
                     <><Picker
                 selectedValue={selectedStartYear}
                 style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue) => setSelectedStartYear(itemValue)}
+                onValueChange={(itemValue) => onChange(itemValue)}
               >
                 {YEARS.map((item) => (
                   <Picker.Item label={item} value={item} key={item} />
@@ -172,7 +194,7 @@ export default function Information({ route, navigation }) {
               ): null}
         </View>
         <View style = {styles.buttonsDates} >
-          <Button onPress={test} title="View results" />
+          <Button onPress={onClick} title="View results" />
         </View>
         <Text style={styles.buttonsDates}>{`${start.getFullYear()}${start.getMonth()}${start.getDate()}`}</Text>
     </View>
