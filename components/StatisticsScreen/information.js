@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectBox from 'react-native-multi-selectbox';
 import Axios from 'axios';
 import { xorBy } from 'lodash';
-import { DATAYPES, YEARS, TIME, PARAMETERS} from '../utils/variables';
+import { DATAYPES, YEARS, TIME, PARAMETERS, HOURLY, DAILY, MONTHLY, CLIMATOLOGY} from '../utils/variables';
 
 
 export default function Information({ route, navigation }) {
@@ -23,6 +23,7 @@ export default function Information({ route, navigation }) {
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
   const [years2, setYears2] = useState([...YEARS]);
+  const [parametersValues,setParametersValues] = useState(HOURLY);
   let link = "";
   let parameters = "";
 
@@ -33,6 +34,19 @@ export default function Information({ route, navigation }) {
     setEnd(currentDate);
     setShowButtonEnd(true);
   };
+
+  const onChangeTimeValue = (item) => {
+    setTimeValue(item);
+    if (item === "Hourly"){
+      setParametersValues(HOURLY)
+    }else if (item === "Daily"){
+      setParametersValues(DAILY)
+    }else if (item === "Monthly"){
+      setParametersValues(MONTHLY)
+    }else if (item === "Climatology"){
+      setParametersValues(CLIMATOLOGY)
+    }
+  }
 
   const onChangeEnd = (event, selectedDate) => {
     const currentDate = selectedDate || end;
@@ -108,10 +122,22 @@ export default function Information({ route, navigation }) {
   }
   return (
     <View style={styles.container}>
+      <View style={styles.timeContainer}>
+        <Text>Service: </Text>
+        <Picker
+          selectedValue={timeValue}
+          style={styles.picker}
+          onValueChange={(itemValue) => onChangeTimeValue(itemValue)}
+        >
+        {TIME.map((item) => (
+        <Picker.Item label={item} value={item} key={item} />
+         ))}
+        </Picker>
+      </View>
       <View style={styles.selectbox}> 
         <SelectBox
           label="Select the parameters"
-          options={PARAMETERS}
+          options={parametersValues}
           selectedValues={selectedParameters}
           onMultiSelect={onMultiChange()}
           onTapClose={onMultiChange()}
@@ -119,7 +145,7 @@ export default function Information({ route, navigation }) {
         />
       </View>
         <View>
-          <View style={styles.timeContainer}>
+          {/* <View style={styles.timeContainer}>
             <Text>Service: </Text>
             <Picker
               selectedValue={timeValue}
@@ -130,7 +156,7 @@ export default function Information({ route, navigation }) {
             <Picker.Item label={item} value={item} key={item} />
              ))}
             </Picker>
-          </View>
+          </View> */}
           {(timeValue === "Hourly" || timeValue === "Daily") && (
           <View>
             <View style = {styles.buttonsDates}>
@@ -206,7 +232,7 @@ export default function Information({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 10,
     alignItems: "center",
   },
   buttonsDates:{
@@ -234,6 +260,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   timeContainer:{
+    paddingBottom: 20,
     alignItems: "center",
     flexDirection: "row",
     flexWrap: "wrap",
