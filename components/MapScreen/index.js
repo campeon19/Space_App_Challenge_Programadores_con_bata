@@ -1,7 +1,8 @@
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity} from "react-native";
-import React, {useEffect, useState} from "react";
+import { View, StyleSheet, Dimensions, Text, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location"
+import logo from "../../assets/icon.png"
 
 const latitudeDelta = 0.009;
 const longitudeDelta = 0.009;
@@ -9,6 +10,7 @@ const longitudeDelta = 0.009;
 export default function MapScreen({ navigation }) {
     const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 })
     const [initialRegion, setInitialRegion] = useState(null)
+
 
     const getLocation = async () => {
         let coords
@@ -36,7 +38,6 @@ export default function MapScreen({ navigation }) {
     }, [])
 
     const setLocalization = () => {
-        alert(`Latitud: ${coordinates.latitude} Longitud: ${coordinates.longitude}`)
         navigation.navigate('Statistics', { location: coordinates })
     }
 
@@ -60,11 +61,14 @@ export default function MapScreen({ navigation }) {
                         style={styles.button}
                         onPress={setLocalization}
                     >
-                        <Text style={styles.text}>SELECCIONAR</Text>
+                        <Text style={styles.text}>SELECT LOCATION</Text>
                     </TouchableOpacity>
                 </>
             ) : (
-                <Text>Por favor espera...</Text>
+                <View style={styles.loadingContainer}>
+                    <Image style={styles.loadingIcon} source={ logo } />
+                    <Text style={styles.loadingText}>Loading, please wait</Text>
+                </View>
             )}
         </View>
     );
@@ -87,5 +91,22 @@ const styles = StyleSheet.create({
     text: {
         color: 'white',
         fontWeight: 'bold',
+    },
+    loadingContainer: {
+        display: "flex",
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#5834f7",
+    },
+    loadingIcon: {
+        width: 200,
+        height: 200,
+    },
+    loadingText: {
+        fontWeight: "300",
+        color: 'white',
+        fontSize: 20,
     }
 });
