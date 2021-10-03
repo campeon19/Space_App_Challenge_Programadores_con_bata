@@ -6,17 +6,16 @@ import logo from '../../assets/icon.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 
-function IntroductionScreen({ navigation }) {
+function IntroductionScreen({ navigation, changeShowApp, showApp }) {
     const [message, setMessage] = useState('Loading...');
-    const [showRealApp, setShowRealApp] = useState(false);
 
-    const onDone = () => {
-        setShowRealApp(true);
-    };
+    // const onDone = () => {
+    //     props.changeShowApp()
+    // };
     
-    const onSkip = () => {
-        setShowRealApp(true);
-    };
+    // const onSkip = () => {
+    //     props.changeShowApp()
+    // };
 
     const RenderItem = ({ item }) => {
         return (
@@ -69,6 +68,9 @@ function IntroductionScreen({ navigation }) {
 
 
     useEffect(() => {
+
+        console.log(showApp)
+
         fetch('https://reactnative.dev/movies.json')
             .then((response) => response.json())
             .then((json) => setMessage(json.movies[0].title))
@@ -77,7 +79,7 @@ function IntroductionScreen({ navigation }) {
 
     return (
         <>
-        {showRealApp ? (
+        {showApp ? (
             <View style={styles.container}>
                 <Text>This is the introduction Screen!</Text>
                 <Text>{message}</Text>
@@ -111,9 +113,9 @@ function IntroductionScreen({ navigation }) {
             <AppIntroSlider
                 data={slides}
                 renderItem={RenderItem}
-                onDone={onDone}
+                onDone={changeShowApp}
                 showSkipButton={true}
-                onSkip={onSkip}
+                onSkip={changeShowApp}
                 renderDoneButton={renderDoneButton1}
                 renderNextButton={renderNextButton1}
                 renderSkipButton={renderSkipButton}
@@ -141,7 +143,7 @@ function mapDispatchToProps(dispatch){
 
 }
 
-export default connect(mapStateToProps)(IntroductionScreen)
+export default connect( mapStateToProps, mapDispatchToProps )( IntroductionScreen )
 
 
 
