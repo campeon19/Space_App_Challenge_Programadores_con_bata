@@ -48,6 +48,8 @@ export default function Information({ route, navigation }) {
   const request = async () => {
     var startDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
     var endDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
+    console.log(startDate)
+    console.log(endDate)
     try {
         const {data} = await Axios.get(link,
             {
@@ -86,7 +88,7 @@ export default function Information({ route, navigation }) {
   }
 
   useEffect(() => {
-    setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear))));
+    setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear)+1)));
   }, [selectedStartYear]);
 
   const test = () => {
@@ -147,7 +149,8 @@ export default function Information({ route, navigation }) {
                               is24Hour={true}
                               display="default"
                               onChange={onChangeStart}
-                              minimumDate={new Date(2001, 0, 1)} />
+                              minimumDate={new Date(2001, 0, 1)} 
+                              maximumDate={new Date(2020, 11, 30)} />
                       )}
                       {showButtonEnd && (
                           <View style = {styles.buttonsDates} >
@@ -162,7 +165,8 @@ export default function Information({ route, navigation }) {
                                   is24Hour={true}
                                   display="default"
                                   onChange={onChangeEnd}
-                                  minimumDate={start} />
+                                  minimumDate={start} 
+                                  maximumDate={new Date(2020, 11, 30)} />
                           )}
                     </View>
                   )}
