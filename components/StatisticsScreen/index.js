@@ -9,7 +9,7 @@ import {Dimensions} from "react-native";
 import Axios from 'axios';
 import {TEMPORALDAILY} from '../utils/rutas'
 import {Rect, Text as TextSVG, Svg, Polygon} from "react-native-svg";
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -93,7 +93,7 @@ export default function StatisticsScreen({ navigation }) {
         backgroundGradientToOpacity: 2,
         decimalPlaces: 2,
         color: (opacity = 0) => `rgba(255, 0, 0, ${opacity})`,
-        labelColor: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
+        labelColor: (opacity = 0) => `rgba(0, 0,0, ${opacity})`,
         propsForDots:{
             r: '3',
             strokeWidth: '2',
@@ -112,14 +112,20 @@ export default function StatisticsScreen({ navigation }) {
             <View >
                 <Text style={styles.title}> IDK </Text>
                 <View style={styles.card}>
-                    <Icon name="location" size={35} color="#25166B" />
+                    <Icon name="location-on" size={35} color="#25166B" />
                     <View style={styles.column}>
-                        <Text style={styles.text}> Latitude: </Text>
-                        <Text style={styles.text}> Longitude: </Text>
+                        <View>
+                            <Text style={styles.text}> Latitude: </Text>
+                            <Text style={styles.text}> -95.523 </Text>
+                        </View>
+                        <View>
+                            <Text style={styles.text}> Latitude: </Text>
+                            <Text style={styles.text}> -95.523 </Text>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.card}>
-                    <Text style={styles.subtitle}> Time </Text>
+                    <Icon name="date-range" size={35} color="#25166B" />
                     <View style={styles.column}>
                         <Text style={styles.text}> Start: </Text>
                         <Text style={styles.text}> End: </Text>
@@ -211,10 +217,16 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginTop: 10,
         padding:10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#000',
         width: Dimensions.get("window").width - 20,
         flexDirection: 'row'
     },
-
+    column:{
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#F5F5F5',
+        flexDirection: 'row',
+    },
     title:{
        color: '#6A706E',
        width: 100,

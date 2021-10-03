@@ -66,12 +66,15 @@ export default function Information({ route, navigation }) {
                 },
             });
         console.log('new')
+        let test = {}
+        Object.values(data.properties.parameter).map((item) => {
+            item = data.properties.parameter[item]
+        })
         await setDatos({
             ...datos,
             x_axis: Object.keys(data.properties.parameter),
             y_axis: Object.values(data.properties.parameter)
         });
-        console.log(datos.x_axis)
     } catch (e) {
         console.log(e);
     }
@@ -173,7 +176,7 @@ export default function Information({ route, navigation }) {
   );
 }
 /*
-/api/temporal/climatology/point?parameters=T2M&community=SB&longitude=0&latitude=0&format=JSON 
+/api/temporal/climatology/point?parameters=T2M&community=SB&longitude=0&latitude=0&format=JSON
 */
 const styles = StyleSheet.create({
   container: {
