@@ -69,7 +69,7 @@ export default function Information({ route, navigation }) {
                 },
             });
         console.log(data.properties.parameter);
-        //navigation.navigate('StatisticsGraphics', { location: data });
+        navigation.navigate('StatisticsGraphics', { location: data });
     } catch (e) {
         console.log(e);
         alert("Invalid Data");

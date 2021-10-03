@@ -63,7 +63,7 @@ const HOURLY = [
       id: 'CLRSKY_SFC_PAR_TOT',
     },
 ]
-const Daily = [
+const DAILY = [
     {
       item: 'Precipitation ',
       id: 'PRECTOTCORR',
@@ -705,4 +705,8 @@ module.exports = {
     YEARS,
     TIME,
     PARAMETERS,
+    HOURLY,
+    MONTHLY,
+    DAILY,
+    CLIMATOLOGY,
 }
