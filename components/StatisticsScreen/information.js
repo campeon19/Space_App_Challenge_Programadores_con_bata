@@ -18,11 +18,8 @@ export default function Information({ route, navigation }) {
   const [showButtonEnd, setShowButtonEnd] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
-  const [link, setLink] = useState("");
-  const [datos, setDatos] = useState({
-    x_axis: [0],
-    y_axis: [0],
-  });
+  //const [link, setLink] = useState("asd");
+  let link = ""
 
   const onChangeStart = (event, selectedDate) => {
     const currentDate = selectedDate || start;
@@ -45,11 +42,13 @@ export default function Information({ route, navigation }) {
   };
 
   const request = async () => {
+    console.log(parametersValue)
+    console.log(location.longitude)
+    console.log(location.latitude)
+    console.log(link)
+    console.log(`${start.getFullYear()}${start.getMonth()}${start.getDate()}`)
+    console.log(`${end.getFullYear()}${end.getMonth()}${start.getDate()}`)
     try {
-      console.log(link)
-      console.log(parametersValue)
-      console.log(location.longitude)
-      console.log(location.latitude)
         const {data} = await Axios.get(link,
             {
                 headers: {
@@ -60,27 +59,19 @@ export default function Information({ route, navigation }) {
                     community: "RE",
                     longitude: location.longitude,
                     latitude: location.latitude,
-                    start: "20201201",
-                    end: "20201231",
+                    start: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`,
+                    end: `${end.getFullYear()}${end.getMonth()}${start.getDate()}`,
                     format: "JSON",
                 },
             });
-        console.log('new')
-        let test = {}
-        Object.values(data.properties.parameter).map((item) => {
-            item = data.properties.parameter[item]
-        })
-        await setDatos({
-            ...datos,
-            x_axis: Object.keys(data.properties.parameter),
-            y_axis: Object.values(data.properties.parameter)
-        });
+        console.log(data.properties.parameter)
+        navigation.navigate('StatisticsGraphics', { location: data })
     } catch (e) {
         console.log(e);
     }
   };
   const onClick = () => {
-    setLink(`${ruta}/${selectedValue.toLowerCase()}/${timeValue.toLowerCase()}/point`);
+    link = `${ruta}/${selectedValue.toLowerCase()}/${timeValue.toLowerCase()}/point`;
     request();
   }
 
@@ -175,9 +166,6 @@ export default function Information({ route, navigation }) {
     </View>
   );
 }
-/*
-/api/temporal/climatology/point?parameters=T2M&community=SB&longitude=0&latitude=0&format=JSON
-*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
