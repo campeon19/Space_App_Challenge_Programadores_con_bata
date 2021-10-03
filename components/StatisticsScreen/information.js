@@ -10,7 +10,8 @@ export default function Information({ route, navigation }) {
   const { location } = route.params;
   const ruta = "https://power.larc.nasa.gov/api";
   const [selectedValue, setSelectedValue] = useState("Temporal");
-  const [selectedYear, setSelectedYear] = useState("1981");
+  const [selectedStartYear, setSelectedStartYear] = useState("1981");
+  const [selectedEndYear, setSelectedEndYear] = useState("1981");
   const [timeValue, setTimeValue] = useState("Hourly");
   const [parametersValue, setParametersValue] = useState("PRECSNOLAND");
   const [start, setStart] = useState(new Date(1598051730000));
@@ -18,7 +19,7 @@ export default function Information({ route, navigation }) {
   const [showButtonEnd, setShowButtonEnd] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
-  //const [link, setLink] = useState("asd");
+  const [years2, setYears2] = useState([...YEARS]);
   let link = ""
 
   const onChangeStart = (event, selectedDate) => {
@@ -42,12 +43,10 @@ export default function Information({ route, navigation }) {
   };
 
   const request = async () => {
-    console.log(parametersValue)
-    console.log(location.longitude)
-    console.log(location.latitude)
-    console.log(link)
-    console.log(`${start.getFullYear()}${start.getMonth()}${start.getDate()}`)
-    console.log(`${end.getFullYear()}${end.getMonth()}${start.getDate()}`)
+    var startDate = timeValue === "Monthly" ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
+    var endDate = timeValue === "Monthly" ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
+    console.log(startDate)
+    console.log(endDate)
     try {
         const {data} = await Axios.get(link,
             {
@@ -59,8 +58,8 @@ export default function Information({ route, navigation }) {
                     community: "RE",
                     longitude: location.longitude,
                     latitude: location.latitude,
-                    start: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`,
-                    end: `${end.getFullYear()}${end.getMonth()}${start.getDate()}`,
+                    start: startDate,
+                    end: endDate,
                     format: "JSON",
                 },
             });
@@ -68,6 +67,7 @@ export default function Information({ route, navigation }) {
         navigation.navigate('StatisticsGraphics', { location: data })
     } catch (e) {
         console.log(e);
+        alert("Incorrect datas")
     }
   };
   const onClick = () => {
@@ -75,10 +75,14 @@ export default function Information({ route, navigation }) {
     request();
   }
 
-
   useEffect(() => {
     alert(`Latitud: ${location.latitude} Longitud: ${location.longitude}`)
   }, []);
+
+  const test = () => {
+    setYears2(YEARS.slice((YEARS.findIndex(year => year === selectedStartYear))));
+    console.log(years2)
+  }
 
   return (
     <View style={styles.container}>
@@ -144,15 +148,23 @@ export default function Information({ route, navigation }) {
                     </View>
                   )}
                   { timeValue==="Monthly"&&(
-                    <Picker
-                    selectedValue={selectedYear}
-                    style={{ height: 50, width: 150 }}
-                    onValueChange={(itemValue) => setSelectedYear(itemValue)}
-                  >
-                      {YEARS.map((item)=>(
-                          <Picker.Item label={item} value={item} key={item} />
-                      ))}
-                  </Picker>
+                    <><Picker
+                selectedValue={selectedStartYear}
+                style={{ height: 50, width: 150 }}
+                onValueChange={(itemValue) => setSelectedStartYear(itemValue)}
+              >
+                {YEARS.map((item) => (
+                  <Picker.Item label={item} value={item} key={item} />
+                ))}
+              </Picker><Picker
+                selectedValue={selectedEndYear}
+                style={{ height: 50, width: 150 }}
+                onValueChange={(itemValue) => setSelectedEndYear(itemValue)}
+              >
+                  {years2.map((item) => (
+                    <Picker.Item label={item} value={item} key={item} />
+                  ))}
+                </Picker></>
                   )}
                           </>
           ): selectedValue === "Application"?(
@@ -160,7 +172,7 @@ export default function Information({ route, navigation }) {
               ): null}
         </View>
         <View style = {styles.buttonsDates} >
-          <Button onPress={onClick} title="View results" />
+          <Button onPress={test} title="View results" />
         </View>
         <Text style={styles.buttonsDates}>{`${start.getFullYear()}${start.getMonth()}${start.getDate()}`}</Text>
     </View>
