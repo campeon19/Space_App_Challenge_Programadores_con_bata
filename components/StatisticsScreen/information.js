@@ -64,8 +64,6 @@ export default function Information({ route, navigation }) {
   const request = async () => {
     var startDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedStartYear: `${start.getFullYear()}${start.getMonth()}${start.getDate()}`;
     var endDate = (timeValue === "Monthly"|| timeValue === "Climatology") ? selectedEndYear: `${end.getFullYear()}${end.getMonth()}${end.getDate()}`;
-    console.log(startDate);
-    console.log(endDate);
     try {
         const {data} = await Axios.get(link,
             {
@@ -83,7 +81,7 @@ export default function Information({ route, navigation }) {
                 },
             });
         console.log(data.properties.parameter);
-        navigation.navigate('StatisticsGraphics', { location: data });
+        navigation.navigate('StatisticsGraphics', { location: data, time:  parametersValue});
     } catch (e) {
         console.log(e);
         alert("Invalid Data");
