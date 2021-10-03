@@ -8,7 +8,6 @@ import MenuScreen from "./components/MenuScreen";
 import StatisticsScreen from "./components/StatisticsScreen";
 import StatistiscData from "./components/StatisticsScreen/information";
 import WelcommeScreen from './components/WelcommeScreen';
-import Sliders from './components/WelcommeScreen/sliders';
 
 const Stack = createNativeStackNavigator();
 

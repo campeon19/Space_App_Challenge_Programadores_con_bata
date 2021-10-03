@@ -10,7 +10,7 @@ import Axios from 'axios';
 import {TEMPORALDAILY} from '../utils/rutas'
 
 
-export default function StatisticsScreen({navigation}) {
+export default function StatisticsScreen({ navigation }) {
 
     const screenWidth = Dimensions.get("window").width;
     const [datos, setDatos] = useState({

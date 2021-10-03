@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
-import {Picker} from '@react-native-picker/picker';
+import { View, StyleSheet, Text, Button, Platform } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function Information () {
+export default function Information({ route, navigation }) {
+  const { location } = route.params;
   const dataTypes = ["Temporal","Application"];
   const years = [];
   const times = ["Hourly","Daily", "Monthly", "Climatology"]
@@ -38,9 +39,10 @@ export default function Information () {
     for(let i = 0; i <= 40 ; i++){
       years.push((1981 + i));
     }
-  } 
+  }
 
   useEffect(() => {
+    alert(`Latitud: ${location.latitude} Longitud: ${location.longitude}`)
     fillingYears();
   }, []);
 

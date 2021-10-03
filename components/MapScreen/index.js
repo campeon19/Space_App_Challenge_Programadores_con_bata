@@ -35,14 +35,31 @@ export default function MapScreen({ navigation }) {
             })
     }, [])
 
+    const setLocalization = () => {
+        alert(`Latitud: ${coordinates.latitude} Longitud: ${coordinates.longitude}`)
+        navigation.navigate('Statistics', { location: coordinates })
+    }
+
     return (
         <View style={styles.container}>
             { initialRegion ? (
                 <>
-                    <MapView style={styles.map} initialRegion={initialRegion} showsUserLocation onPress={(e) => setCoordinates(e.nativeEvent.coordinate)}>
-                         <Marker draggable coordinate={coordinates} onDragEnd={(e) => setCoordinates(e.nativeEvent.coordinate)} />
+                    <MapView
+                        style={styles.map}
+                        initialRegion={initialRegion}
+                        showsUserLocation
+                        onPress={(e) => setCoordinates(e.nativeEvent.coordinate)}
+                    >
+                        <Marker
+                            draggable
+                            coordinate={coordinates}
+                            onDragEnd={(e) => setCoordinates(e.nativeEvent.coordinate)}
+                        />
                     </MapView>
-                    <TouchableOpacity style={styles.button} onPress={() => alert(`Latitud: ${coordinates.latitude} Longitud: ${coordinates.longitude}`)}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={setLocalization}
+                    >
                         <Text style={styles.text}>SELECCIONAR</Text>
                     </TouchableOpacity>
                 </>
