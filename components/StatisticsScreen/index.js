@@ -51,7 +51,6 @@ export default function StatisticsScreen({route, navigation}) {
     }
     const setHourDate = (dates) => {
         const labelRadix = Math.max(Math.floor(dates.length / 4), 1)
-        console.log(dates.length)
         const date = []
         const labels = []
         dates.map((item, index) => {
@@ -71,7 +70,6 @@ export default function StatisticsScreen({route, navigation}) {
     }
     const setMonthDate = (dates) => {
         const labelRadix = Math.max(Math.floor(dates.length / 4), 1)
-        console.log(dates.length)
         const date = []
         const labels = []
         dates.map((item, index) => {

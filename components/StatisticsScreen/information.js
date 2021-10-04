@@ -80,7 +80,6 @@ export default function Information({ route, navigation }) {
                     format: "JSON",
                 },
             });
-        console.log(timeValue)
         navigation.navigate('StatisticsGraphics', { location: data, time:  timeValue});
     } catch (e) {
         console.log(e);
@@ -112,7 +111,6 @@ export default function Information({ route, navigation }) {
     selectedParameters.map((item, index) => {
       parameters += item.id+",";
     })
-    console.log(parameters);
   }
   const [selectedParameters, setSelectedParameters] = useState([])
   function onMultiChange() {

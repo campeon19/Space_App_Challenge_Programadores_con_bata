@@ -40,7 +40,6 @@ const request = async (latitude, longitude) => {
     
     Axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
       setRawSunAmount(response.data)
     })
     .catch(function (error) {
@@ -49,6 +48,8 @@ const request = async (latitude, longitude) => {
     
   }
 ;
+
+
 // const [isDataFormated]
   useEffect(() => {
     getLocation()
