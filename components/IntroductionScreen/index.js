@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import React, {useEffect, useState} from "react";
 import AppIntroSlider from 'react-native-app-intro-slider';
 import logo from '../../assets/icon.png';
+import sun1 from '../../assets/sun1.gif';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 
@@ -27,7 +28,7 @@ function IntroductionScreen({ navigation, changeShowApp, showApp }) {
               justifyContent: 'space-around',
               paddingBottom: 100,
             }}>
-            <Image style={styles.introImageStyle} source={logo} />
+            <Image style={styles.introImageStyle} source={item.image} />
             <Text style={styles.introTitleStyle}>{item.title}</Text>            
             <Text style={styles.introTextStyle}>{item.text}</Text>
           </View>
@@ -220,23 +221,16 @@ const styles = StyleSheet.create({
 const slides = [
     {
       key: 's1',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non posuere mauris, ut ornare urna. Sed dignissim sodales enim, tristique eleifend lacus laoreet eu. Maecenas et bibendum erat, et imperdiet neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sodales libero lobortis fringilla fermentum. Phasellus non diam sagittis nunc cursus pretium. Pellentesque pulvinar vulputate elit, a euismod purus efficitur ut.',
-      title: 'Welcomme!',
-      image: { logo },
+      text: 'Welcome to UVShine! We are here to help you know information about the sunlight.',
+      title: 'Welcome to UVShine!',
+      image:  logo ,
       // backgroundColor: '#20d2bb',
     },
     {
       key: 's2',
-      title: 'Sun data in your hand',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non posuere mauris, ut ornare urna. Sed dignissim sodales enim, tristique eleifend lacus laoreet eu. Maecenas et bibendum erat, et imperdiet neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sodales libero lobortis fringilla fermentum. Phasellus non diam sagittis nunc cursus pretium.',
-      image: { logo },
+      title: 'Discover the Sun!',
+      text: 'You can choose a location to get up-to-date data about sunshine in that area!',
+      image:  sun1 ,
       // backgroundColor: '#febe29',
-    },
-    {
-      key: 's3',
-      title: 'Sun Statistics around your home',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non posuere mauris, ut ornare urna. Sed dignissim sodales enim, tristique eleifend lacus laoreet eu. Maecenas et bibendum erat, et imperdiet neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sodales libero lobortis fringilla fermentum.',
-      image: { logo },
-      // backgroundColor: '#22bcb5',
     },
 ];
