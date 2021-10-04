@@ -11,8 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function StatisticsScreen({route, navigation}) {
-    const {location} = route.params;
-    const {time} = route.params.time;
+    const {location, time} = route.params;
     const screenWidth = Dimensions.get("window").width;
     const [datos, setDatos] = useState({
         x_axis: {a: [0]},
@@ -93,7 +92,13 @@ export default function StatisticsScreen({route, navigation}) {
 
         // Fecha
         const dates = [location.header.start, location.header.end]
-        const date = setDate(dates)
+        var date
+        if (time !== 'Climatology')
+            date = setDate(dates)
+        else if (time === 'Monthly')
+            date = setMonthDate(dates)
+        else
+            date = [dates, dates]
         const click = {
             x: 0,
             y: 0,
@@ -110,14 +115,14 @@ export default function StatisticsScreen({route, navigation}) {
             const keys = Object.keys(location.properties.parameter[param])
             const values = Object.values(location.properties.parameter[param])
             var labels
-            if (dates[0] === dates[1] && time !== 'Climatology')
+            if (time !== 'Climatology' && dates[0] === dates[1])
                 labels = setHourDate(keys)
             else if (time !== 'Climatology' && time !== 'Monthly')
                 labels = setDate(keys)
-            else if (time !== 'Monthly')
+            else if (time === 'Monthly')
                 labels = setMonthDate(keys)
             else
-                labels = keys
+                labels = [keys, keys]
 
             x_axis[param] = labels[0]
             y_axis[param] = values
@@ -140,7 +145,6 @@ export default function StatisticsScreen({route, navigation}) {
             data: data,
             dates: date,
         })
-
 
     }, []);
 
