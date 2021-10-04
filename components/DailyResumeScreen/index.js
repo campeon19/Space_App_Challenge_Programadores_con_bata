@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, TouchableHighlight } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location"
@@ -74,10 +74,10 @@ useEffect(() =>{
 
 useEffect(() =>{
 
-  //Cuando ya tengamos la info a graficar
-  if(Object.keys(rawSunAmount).length !== 0){
-    graphicData(rawSunAmount)
-  }
+  // //Cuando ya tengamos la info a graficar
+  // if(Object.keys(rawSunAmount).length !== 0){
+  //   let suma =
+  // }
 
 }, [rawSunAmount])
 
@@ -85,7 +85,12 @@ useEffect(() =>{
         <View style={styles.container}>
             <Text>Estadisticas Diarias</Text>
 
-            {coordinates.isLocationRequested?<Text>Ya hay datos de localizacion</Text>:<Text>Cargando...</Text>}
+            {coordinates.isLocationRequested?<Text><TouchableHighlight
+                    style={styles.boton1}
+                    onPress={() => graphicData(rawSunAmount)}
+                    // color = '#25166B'
+                  ><Text style={styles.text1}>Recent UV Radiation in your area</Text>
+                </TouchableHighlight></Text>:<Text>Cargando...</Text>}
             <StatusBar style="auto" />
             <Button
                 onPress={() => navigation.navigate('Introduction')}
@@ -102,4 +107,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    text1: {
+      color: 'white',
+      fontSize: 18,
+    },
+    boton1: {         
+      paddingTop:10,
+      paddingBottom:10,
+      backgroundColor: "#25166B",
+      borderRadius:20,
+      borderWidth: 1,
+      borderColor: '#fff',
+      height: 55,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 });
+
+
