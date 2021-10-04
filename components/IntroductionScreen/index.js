@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View, Text, Image, Button} from "react-native";
+import {SafeAreaView, StyleSheet, View, Text, Image, Button, TouchableHighlight} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, {useEffect, useState} from "react";
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -82,20 +82,20 @@ function IntroductionScreen({ navigation, changeShowApp, showApp }) {
                 <Text style={styles.title1}>What do you want to see today?</Text>
               </View>
               <View style={styles.botonSize}>
-                <Button
+                <TouchableHighlight
                     style={styles.boton1}
                     onPress={() => navigation.navigate('Daily')}
-                    title="To Daily"
-                    color = '#25166B'
-                  />
+                    // color = '#25166B'
+                  ><Text style={styles.text1}>To Daily</Text>
+                </TouchableHighlight>
               </View>
               <View style={styles.botonSize}>
-                <Button
+                <TouchableHighlight
                     style={styles.boton1}
                     onPress={() => navigation.navigate('Map')}
-                    title="To Map"
-                    color = '#25166B'
-                />
+                    // color = '#25166B'
+                  ><Text style={styles.text1}>To Map</Text>
+                </TouchableHighlight>
               </View>
               <View style={styles.view1}>
                 <Image source={logo} style={styles.logoSize}  />
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     title1: {
       fontSize: 30,
       fontWeight: 'bold',
-      paddingBottom: 100,
+      paddingBottom: 80,
       paddingTop: 30,
       textAlign: 'center',
     },
@@ -192,16 +192,23 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     botonSize: {
-      marginTop: 30,
-      width: 250,  
+      marginTop: 40,
+      width: 280,  
     },
     boton1: {         
       paddingTop:10,
       paddingBottom:10,
       backgroundColor: "#25166B",
-      borderRadius:10,
+      borderRadius:20,
       borderWidth: 1,
-      borderColor: '#fff'
+      borderColor: '#fff',
+      height: 55,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    text1: {
+      color: 'white',
+      fontSize: 18,
     },
     logoSize: {
       marginTop: 70,
