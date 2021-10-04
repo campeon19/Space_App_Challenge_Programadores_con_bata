@@ -17,28 +17,33 @@ const getLocation = async () => {
   return coords
 }
 
-const request = async () => {
-    var config = {
-        method: 'get',
-        url: 'https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=-90.6071&latitude=14.5120&start=20210101&end=20210331&format=JSON',
-        headers: { }
-      };
-      
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      
-    }
-  ;
+
 
 export default function DailyResumeScreen({ navigation }) 
 {
 
 const [coordinates, setCoordinates] = useState({isLocationRequested: false, latitude: 0, longitude: 0 })
+const [rawSunAmount, setRawSunAmount] = useState({})
+
+
+const request = async (latitude, longitude) => {
+  var config = {
+      method: 'get',
+      url: 'https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude='+longitude+'&latitude='+latitude+'&start=20210101&end=20210331&format=JSON',
+      headers: { }
+    };
+    
+    Axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      setRawSunAmount(response.data.properties.parameter.ALLSKY_SFC_SW_DWN)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
+  }
+;
 // const [isDataFormated]
   useEffect(() => {
     getLocation()
@@ -51,14 +56,34 @@ const [coordinates, setCoordinates] = useState({isLocationRequested: false, lati
         })
 }, [])
 
+
 useEffect(() =>{
 
   //Only if the location is right
   if(coordinates.isLocationRequested){
-
+    request(coordinates.latitude, coordinates.longitude)
   }
 
 }, [coordinates])
+
+
+useEffect(() =>{
+
+  //Cuando ya tengamos la info a graficar
+  if(Object.keys(rawSunAmount).length !== 0){
+    const rawKeys = Object.keys(rawSunAmount)
+    const xValues = rawKeys.map(function(x) {
+      return parseInt(x);
+   });
+   const yKeys = rawKeys.map(function(x) {
+    return rawSunAmount[x];
+ });
+
+
+
+  }
+
+}, [rawSunAmount])
 
     return (
         <View style={styles.container}>
