@@ -39,7 +39,7 @@ export default function DailyResumeScreen({ navigation })
 {
 
 const [coordinates, setCoordinates] = useState({isLocationRequested: false, latitude: 0, longitude: 0 })
-const [isDataFormated]
+// const [isDataFormated]
   useEffect(() => {
     getLocation()
         .then(coords => {

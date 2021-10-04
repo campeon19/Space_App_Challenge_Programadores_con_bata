@@ -78,33 +78,29 @@ function IntroductionScreen({ navigation, changeShowApp, showApp }) {
         <>
         {showApp ? (
             <View style={styles.container}>
-                <Text>This is the introduction Screen!</Text>
-                <Text>{message}</Text>
-                <StatusBar style="auto" />
+              <View>
+                <Text style={styles.title1}>What do you want to see today?</Text>
+              </View>
+              <View style={styles.botonSize}>
                 <Button
+                    style={styles.boton1}
                     onPress={() => navigation.navigate('Daily')}
                     title="To Daily"
-                />
+                    color = '#25166B'
+                  />
+              </View>
+              <View style={styles.botonSize}>
                 <Button
+                    style={styles.boton1}
                     onPress={() => navigation.navigate('Map')}
                     title="To Map"
+                    color = '#25166B'
                 />
-                <Button
-                    onPress={() => navigation.navigate('Menu')}
-                    title="Menu"
-                />
-                <Button
-                    onPress={() => navigation.navigate('Statistics')}
-                    title="Statistics"
-                />
-                <Button
-                    onPress={() => navigation.navigate('Welcomme')}
-                    title="Welcomme"
-                />
-                <Button
-                    onPress={() => navigation.navigate('StatisticsGraphics')}
-                    title="StatisticsGraphics"
-                />
+              </View>
+              <View style={styles.view1}>
+                <Image source={logo} style={styles.logoSize}  />
+              </View>
+              <StatusBar style="auto" />
             </View>
         ) : (
             <AppIntroSlider
@@ -149,7 +145,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     introImageStyle: {
         width: 140,
@@ -184,6 +179,34 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    title1: {
+      fontSize: 30,
+      fontWeight: 'bold',
+      paddingBottom: 100,
+      paddingTop: 30,
+      textAlign: 'center',
+    },
+    view1: {
+      alignItems: "center",
+      justifyContent: 'center',
+    },
+    botonSize: {
+      marginTop: 30,
+      width: 250,  
+    },
+    boton1: {         
+      paddingTop:10,
+      paddingBottom:10,
+      backgroundColor: "#25166B",
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor: '#fff'
+    },
+    logoSize: {
+      marginTop: 70,
+      width: 140,
+      height: 140,
     },
 });
 
