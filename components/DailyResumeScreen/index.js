@@ -83,16 +83,16 @@ useEffect(() =>{
 
     return (
         <View style={styles.container}>
-            <Text>Estadisticas Diarias</Text>
+            <Text style={styles.title}>Daily statistics</Text>
 
             {coordinates.isLocationRequested?<Text><TouchableHighlight
                     style={styles.boton1}
                     onPress={() => graphicData(rawSunAmount)}
                     // color = '#25166B'
                   ><Text style={styles.text1}>Recent UV Radiation in your area</Text>
-                </TouchableHighlight></Text>:<Text>Cargando...</Text>}
+                </TouchableHighlight></Text>:<Text>Loading, please wait...</Text>}
             <StatusBar style="auto" />
-            <Button
+            <Button style={styles.returnButton}
                 onPress={() => navigation.navigate('Introduction')}
                 title="Return"
             />
@@ -101,27 +101,36 @@ useEffect(() =>{
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text1: {
-      color: 'white',
-      fontSize: 18,
-    },
-    boton1: {         
-      paddingTop:10,
-      paddingBottom:10,
-      backgroundColor: "#25166B",
-      borderRadius:20,
-      borderWidth: 1,
-      borderColor: '#fff',
-      height: 55,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+},
+title: {
+  fontSize: 32,
+  paddingBottom:50,
+},
+text1: {
+  color: 'white',
+  fontSize: 18,
+},
+boton1: {         
+  paddingTop:10,
+  paddingBottom:10,
+  paddingHorizontal:10,
+  backgroundColor: "#25166B",
+  borderRadius:20,
+  borderWidth: 1,
+  borderColor: '#fff',
+  height: 55,
+  alignItems: 'center',
+  justifyContent: 'center',
+
+
+},returnButton: {
+  paddingTop:50,
+},
 });
 
 
