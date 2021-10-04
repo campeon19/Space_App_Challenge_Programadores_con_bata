@@ -19,9 +19,14 @@ const getLocation = async () => {
 
 
 
+
 export default function DailyResumeScreen({ navigation }) 
 {
 
+  const graphicData = (data) =>{
+    navigation.navigate('StatisticsGraphics', { location: data, time:  'Daily'});
+  }
+  
 const [coordinates, setCoordinates] = useState({isLocationRequested: false, latitude: 0, longitude: 0 })
 const [rawSunAmount, setRawSunAmount] = useState({})
 
@@ -36,7 +41,7 @@ const request = async (latitude, longitude) => {
     Axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      setRawSunAmount(response.data.properties.parameter.ALLSKY_SFC_SW_DWN)
+      setRawSunAmount(response.data)
     })
     .catch(function (error) {
       console.log(error);
@@ -71,16 +76,7 @@ useEffect(() =>{
 
   //Cuando ya tengamos la info a graficar
   if(Object.keys(rawSunAmount).length !== 0){
-    const rawKeys = Object.keys(rawSunAmount)
-    const xValues = rawKeys.map(function(x) {
-      return parseInt(x);
-   });
-   const yKeys = rawKeys.map(function(x) {
-    return rawSunAmount[x];
- });
-
-
-
+    graphicData(rawSunAmount)
   }
 
 }, [rawSunAmount])
